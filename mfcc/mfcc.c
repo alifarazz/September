@@ -85,7 +85,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+#if defined(WIN32)
+#include "SPTK.h"
+#else
 #include <SPTK/SPTK.h>
+#endif
 
 
 /*  Default Values  */

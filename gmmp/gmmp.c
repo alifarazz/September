@@ -75,22 +75,22 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-/* #ifdef HAVE_STRING_H */
+#ifdef HAVE_STRING_H
 #include <string.h>
-/* #else */
-/* #include <strings.h> */
-/* #ifndef HAVE_STRRCHR */
-/* #define strrchr rindex */
-/* #endif */
-/* #endif */
+#else
+#include <strings.h>
+#ifndef HAVE_STRRCHR
+#define strrchr rindex
+#endif
+#endif
 
 #include <math.h>
 
-/* #if defined(WIN32) */
-/* #include "SPTK.h" */
-/* #else */
+#if defined(WIN32)
+#include "SPTK.h"
+#else
 #include <SPTK/SPTK.h>
-/* #endif */
+#endif
 
 /*  Default Values  */
 
