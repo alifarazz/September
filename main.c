@@ -131,8 +131,8 @@ G_MODULE_EXPORT void on_record_gmmp_btn_clicked(GtkButton *Button ,GtkListStore 
     if(filename[j] == NULL)
       break;
 
-    sprintf (resulttxt, "%d", (int) (results[j] + 140));
-    gtk_list_store_set(list, &iter, PROGRESS, (int) (results[j] + 140),
+    sprintf (resulttxt, "%d", (int) (results[j] + 132));
+    gtk_list_store_set(list, &iter, PROGRESS, (int) (results[j] + 132),
                        PROGRESSTXT, resulttxt, -1);
     /* g_print("%s: %d\n", extractName(filename[j]),  (int) round(fabs(((results[j] - min)) / max - min)) *100); */
     valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(list), &iter);
