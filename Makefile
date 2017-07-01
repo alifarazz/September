@@ -7,7 +7,7 @@ OPT=-O2
 # warnings
 WARN=-Wall -Wextra
 # standards
-STD=
+STD=-ansi -pedantic
 # pthread
 PTHREAD=-pthread
 
