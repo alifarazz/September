@@ -298,7 +298,8 @@ A Model</property>
                 <property name="can_focus">True</property>
                 <property name="adjustment">adjustment</property>
                 <property name="fill_level">100</property>
-                <property name="round_digits">1</property>
+                <property name="round_digits">0</property>
+                <property name="digits">0</property>
               </object>
             </child>
           </object>

@@ -79,7 +79,7 @@ G_MODULE_EXPORT void on_record_gmmp_btn_clicked(GtkButton *Button ,GtkListStore 
 
   OALSampleSet sset;
   FILE *charfp, *x2xfp, *framefp, *mfccfp;
-  float results[100], min = FLT_MAX, max = FLT_MIN;
+  float results[100], min = FLT_MAX, max = -FLT_MAX;
   char resulttxt[10];
   /* int c; */
   /* FILE *outputfpmfcc = fopen("./res1.mfcc", "wb"); */
