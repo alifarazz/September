@@ -11,7 +11,7 @@ STD=-ansi -pedantic
 # pthread
 PTHREAD=-pthread
 
-CCFLAGS = $(DEBUG) $(WARN) $(PTHREAD) $(STD) -pipe `pkg-config --cflags freealut openal SPTK gtk+-3.0`
+CCFLAGS = $(DEBUG) $(WARN) $(PTHREAD) $(STD) $(OPT) -pipe `pkg-config --cflags freealut openal SPTK gtk+-3.0`
 LDFLAGS = $(PTHREAD) -export-dynamic `pkg-config --libs freealut openal SPTK gtk+-3.0`
 
 SRCS = $(wildcard *.c) $(wildcard ./*/*.c)
