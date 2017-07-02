@@ -80,6 +80,8 @@ alifarazdaghi@gmail.com</property>
       <column type="gint"/>
       <!-- column-name %1 -->
       <column type="gchararray"/>
+      <!-- column-name ABSpath -->
+      <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkWindow" id="main_window">
