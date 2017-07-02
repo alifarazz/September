@@ -322,7 +322,7 @@ A Model</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="opacity">0.25</property>
+                <property name="opacity">0.59999999999999998</property>
                 <property name="use_stock">True</property>
                 <property name="always_show_image">True</property>
                 <signal name="clicked" handler="on_about_btn_clicked" object="abdialog" swapped="no"/>
