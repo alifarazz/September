@@ -9,13 +9,13 @@
     <property name="window_position">center</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">September Project</property>
-    <property name="version">2.5.1</property>
+    <property name="version">2.5.2</property>
     <property name="copyright" translatable="yes">Copyright © 2017-Ali-Amir
 
 This program comes with ABSOLUTELY NO WARRANTY 
 see the GNU General Public license,version 3 or later for details</property>
-    <property name="website">www.google.com</property>
-    <property name="website_label" translatable="yes">website</property>
+    <property name="website">https://gitlab.com/alifarazz/September</property>
+    <property name="website_label" translatable="yes">git repo</property>
     <property name="authors">amir.safizadeh@yahoo.com
 alifarazdaghi@gmail.com</property>
     <property name="logo">rsz_1mic.png</property>
