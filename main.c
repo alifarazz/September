@@ -210,7 +210,6 @@ G_MODULE_EXPORT void on_addModel_clicked(GtkButton *button,GtkListStore *list)
 
   if (response==GTK_RESPONSE_OK){
     filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-    g_print("filename added %s\n", filename);
     gtk_list_store_append(list, &iter);
     gtk_list_store_set(list, &iter,
 											 MODEL, extractName(filename),
