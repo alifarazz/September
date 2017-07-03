@@ -31,7 +31,6 @@ enum {
   ABSPATH
 };
 
-gint i=0;
 ALuint duration = 5;
 
 char* extractName (char *name)
@@ -49,7 +48,7 @@ int main(int argc, char *argv[])
   GtkWidget       *popup;
 
   InitState(SAMPLERATE, FORMAT, calcBufLen(SAMPLERATE, DURATION, FORMAT));
-  alGetError(); /* clear error state */
+  /* alGetError(); /\* clear error state *\/ */
 
   gtk_init(&argc, &argv);
 

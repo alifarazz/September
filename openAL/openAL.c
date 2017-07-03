@@ -253,7 +253,6 @@ void WriteFile (OALSampleSet *sset)
 /*   sampleset.format = FORMAT; */
 /*   sampleset.freq   = SAMPLERATE; */
 
-/*   alutInit(&argc, argv); */
 /*   InitState(SAMPLERATE, */
 /*             FORMAT, */
 /*             ((calcBufLen(SAMPLERATE, DURATION, AL_FORMAT_MONO8) / 2) * 3)); */
@@ -271,7 +270,6 @@ void WriteFile (OALSampleSet *sset)
 /* #endif */
 /*   /\* WriteFile(&sampleset); *\/ */
 
-/*   alutExit(); */
 /*   free(sampleset.data); */
 /*   DestroyState(); */
 /*   return 0; */
