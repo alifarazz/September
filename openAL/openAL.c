@@ -15,6 +15,8 @@
 
 #include "report_error.h"
 
+/* #define OAL_PLAYBACK_ENABLED */
+
 #define SAMPLERATE (44100)
 #define DURATION   (100)
 #define FORMAT     (AL_FORMAT_MONO8)
@@ -62,13 +64,10 @@ ALCsizei calcBufLen (ALCuint sr, ALuint du, ALCenum frmt)
 
 void InitState (ALCuint freq, ALCenum format, ALCsizei RingBufLen)
 {
-  if (NULL == (state.playbackDevice =
+#ifdef OAL_PLAYBACK_ENABLED
+	if (NULL == (state.playbackDevice =
                alcOpenDevice(NULL/*, ALC_DEFAULT_DEVICE_SPECIFIER*/)))
 		utils_alcReportError(NULL, "Could not Open Playback Device");
-
-  if (NULL == (state.captureDevice =
-               alcCaptureOpenDevice(NULL, freq, format, RingBufLen)))
-    utils_alcReportError(NULL, "Could not Open Capture Device");
 
   if (NULL ==
       (state.context = alcCreateContext(state.playbackDevice, NULL)))
@@ -76,11 +75,17 @@ void InitState (ALCuint freq, ALCenum format, ALCsizei RingBufLen)
                          "Could not Create an OpenAL context");
 
   if (ALC_TRUE != alcMakeContextCurrent(state.context))
-    utils_alcReportError(state.playbackDevice,
+    pputils_alcReportError(state.playbackDevice,
                          "Could not Switch to context");
 
   /* No Need for OpenAL 3D Spatialization. */
   alDistanceModel(AL_NONE);
+#endif
+
+  if (NULL == (state.captureDevice =
+							 alcCaptureOpenDevice(NULL, freq, format, RingBufLen)))
+    utils_alcReportError(NULL, "Could not Open Capture Device");
+
   return ;
 }
 
@@ -117,6 +122,7 @@ void Record (OALSampleSet *sset, ALuint duration)
   return ;
 }
 
+#ifdef OAL_PLAYBACK_ENABLED
 void Play (OALSampleSet *sset)
 {
   ALuint alBuffer, alSource;
@@ -147,23 +153,28 @@ void Play (OALSampleSet *sset)
 	alDeleteBuffers(1, &alBuffer);
   return ;
 }
+#endif
 
 void ErrorReport ()
 {
   puts("Here are The Error Reports:");
 	utils_alReportError("alGeterror: ");
+#ifdef OAL_PLAYBACK_ENABLED
 	utils_alcReportError(state.playbackDevice, "alcGeterror: ");
+#endif
 	utils_alcReportError(state.captureDevice, "alcGeterror: ");
 	puts("End of Error Reports");
 }
 
 void DestroyState ()
 {
+#ifdef OAL_PLAYBACK_ENABLED
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(state.context);
 	alcCloseDevice(state.playbackDevice);
   alcDestroyContext(state.context);
 	alcCloseDevice(state.playbackDevice);
+#endif
 	alcCloseDevice(state.captureDevice);
   return ;
 }
@@ -189,16 +200,18 @@ void WriteFile (OALSampleSet *sset)
 /*   InitState(SAMPLERATE, */
 /*             FORMAT, */
 /*             ((calcBufLen(SAMPLERATE, DURATION, AL_FORMAT_MONO8) / 2) * 3)); */
-
+/* #ifdef OAL_PLAYBACK_ENABLED */
 /*   alGetError(); */
 /* 	alcGetError(state.playbackDevice); */
+/* #endif */
 /* 	alcGetError(state.captureDevice); */
 
 /*   Record(&sampleset, DURATION); */
 
 /*   /\* ErrorReport(&globalstate); *\/ */
-
+/* #ifdef OAL_PLAYBACK_ENABLED */
 /*   Play(&sampleset); */
+/* #endif */
 /*   /\* WriteFile(&sampleset); *\/ */
 
 /*   alutExit(); */
