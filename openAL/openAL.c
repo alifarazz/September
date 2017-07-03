@@ -6,11 +6,21 @@
 #ifdef __linux__
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
 #else
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-#include <OpenAL/alut.h>
+#endif
+
+#define HAVE_USLEEP 1
+#define HAVE_UNISTD_H 1
+
+#if HAVE_NANOSLEEP && HAVE_TIME_H
+#include <time.h>
+#include <errno.h>
+#elif HAVE_USLEEP && HAVE_UNISTD_H
+#include <unistd.h>
+#elif HAVE_SLEEP && HAVE_WINDOWS_H
+#include <windows.h>
 #endif
 
 #include "report_error.h"
@@ -40,6 +50,53 @@ static OALstate state;
 
 /* static void */
 /* initSampleSet(SampleSet *ss, ALCuint freq, ); */
+
+ALboolean OALSleep (ALfloat duration)
+{
+  ALuint seconds = (ALuint) duration;
+  ALfloat rest = duration - (ALfloat) seconds;
+
+#if HAVE_NANOSLEEP && HAVE_TIME_H
+
+  ALuint microSecs = (ALuint) (rest * 1000000);
+  struct timespec t, remainingTime;
+  t.tv_sec = (time_t) seconds;
+  t.tv_nsec = ((long) microSecs) * 1000;
+
+  /* At least the interaction of nanosleep and signals is specified! */
+  while (nanosleep (&t, &remainingTime) < 0)
+    {
+      if (errno != EINTR)
+        {
+          return AL_FALSE;
+        }
+      /* If we received a signal, let's try again with the remaining time. */
+      t.tv_sec = remainingTime.tv_sec;
+      t.tv_nsec = remainingTime.tv_nsec;
+    }
+
+#elif HAVE_USLEEP && HAVE_UNISTD_H
+
+  while (seconds > 0)
+    {
+      usleep (1000000);
+      seconds--;
+    }
+  usleep ((unsigned int) (rest * 1000000));
+
+#elif HAVE_SLEEP && HAVE_WINDOWS_H
+
+  while (seconds > 0)
+    {
+      Sleep (1000);
+      seconds--;
+    }
+  Sleep ((DWORD) (rest * 1000));
+
+#endif
+
+  return AL_TRUE;
+}
 
 ALCsizei calcBufLen (ALCuint sr, ALuint du, ALCenum frmt)
 {
@@ -98,7 +155,7 @@ void Record (OALSampleSet *sset, ALuint duration)
 
 	alcCaptureStart(state.captureDevice);
 	/* do { */
-	/* 	alutSleep(0.02); */
+	/* 	OALSleep(0.02); */
   /*   alcGetIntegerv(state.captureDevice, */
   /*                  ALC_CAPTURE_SAMPLES, */
   /*                  sizeof(nCapdSamples), */
@@ -106,7 +163,7 @@ void Record (OALSampleSet *sset, ALuint duration)
 	/* 	/\* printf("%d \n", nCapdSamples); *\/ */
 	/* } while (nCapdSamples <= totalSamples); /\* EDIT (ALCint < ALuint) *\/ */
 
-  alutSleep(duration);
+  OALSleep(duration);
   alcGetIntegerv(state.captureDevice,
                  ALC_CAPTURE_SAMPLES,
                  sizeof(nCapdSamples),
@@ -137,11 +194,11 @@ void Play (OALSampleSet *sset)
 
   puts("start play");
 	alSourcePlay(alSource);
-  alutSleep(sset->len / calcBufLen(SAMPLERATE, 1, AL_FORMAT_MONO8));
+  OALSleep(sset->len / calcBufLen(SAMPLERATE, 1, AL_FORMAT_MONO8));
 
 /*alGetSourcei(alSource, AL_SOURCE_STATE, &source_state);
   while (source_state == AL_PLAYING) {
-    alutSleep(.1);
+    OALSleep(.1);
     alGetSourcei(alSource, AL_SOURCE_STATE, &source_state);
   }*/
 

@@ -9,11 +9,9 @@
 #ifdef __linux__
 #include <AL/al.h>
 #include <AL/alc.h>
-#include <AL/alut.h>
 #else
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-#include <OpenAL/alut.h>
 #endif
 
 #include <gtk/gtk.h>
