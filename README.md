@@ -1,6 +1,6 @@
 #       September
 
-A hackable real-time Speaker Recognition system written in ANSI C.
+A text-independent real-time Speaker Recognition system written in ANSI C.
 
 
 ## Installation
