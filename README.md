@@ -23,7 +23,7 @@ A hackable real-time Speaker Recognition system written in ANSI C.
 
 
 
-**2. Compile it:  `make`**
+**2. Compile it:**  `make`
 
 
 
