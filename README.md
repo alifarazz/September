@@ -7,15 +7,15 @@ A hackable real-time Speaker Recognition system written in ANSI C.
 **1. Install the dependencies**
 
 
-- SPTK: [SPTK] and [SPTK-devel]
+- [SPTK] and [SPTK-devel]
 
 
 
-- OpenAL: [OpenAL]
+- [OpenAL]
 
 
 
-- GNU Make: [GNU Make]
+- [GNU Make]
 
 
 
