@@ -138,6 +138,6 @@ FILE* MFCCFromFrame(FILE* fp)
     fwritef(mc, sizeof(*mc), m + num, outfp);
   }
 
-  
+
 	return outfp;
 }

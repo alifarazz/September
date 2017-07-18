@@ -41,30 +41,83 @@ char* extractName (char *name)
   return name + len;
 }
 
-int main(int argc, char *argv[])
+static void
+app_shutdown (GApplication *application,
+              gpointer      user_data)
 {
-  GtkBuilder      *builder;
+  g_print("hello1!\n");
+  DestroyState();
+  g_application_quit(user_data);
+}
+
+const GActionEntry app_actions[] = {
+  { "quit", app_shutdown },
+  { "about", app_shutdown },
+  { "pref", app_shutdown }
+};
+
+static void
+app_startup (GApplication *app,
+             gpointer      user_data)
+{
   GtkWidget       *window;
+  GtkBuilder      *builder;
   GtkWidget       *popup;
-
-  InitState(SAMPLERATE, FORMAT, calcBufLen(SAMPLERATE, DURATION, FORMAT));
-  /* alGetError(); /\* clear error state *\/ */
-
-  gtk_init(&argc, &argv);
-
+  GMenu           *menu;
   builder = gtk_builder_new();
-  gtk_builder_add_from_file (builder, "./glade/window_main.glade", NULL);
+  gtk_builder_add_from_file (builder, "./glade/new.glade", NULL);
 
   window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
   popup  = GTK_WIDGET(gtk_builder_get_object( builder, "abdialog" ));
   gtk_builder_connect_signals(builder, NULL);
 
+  gtk_application_add_window(app, window);
+  gtk_application_add_window(app, popup);
   g_object_unref(builder);
 
-  gtk_widget_show(window);
-  gtk_main();
+  g_action_map_add_action_entries (G_ACTION_MAP (app), app_actions, G_N_ELEMENTS (app_actions), app);
+  menu = g_menu_new ();
+  g_menu_append (menu, "Preferences", "app.pref");
+  g_menu_append (menu, "About", "app.about");
+  g_menu_append (menu, "Quit", "app.quit");
+  gtk_application_set_app_menu (G_APPLICATION (app), menu);
+  g_object_unref(menu);
 
-  return 0;
+  gtk_application_window_set_show_menubar (window, FALSE);
+  gtk_widget_show(window);
+}
+
+static void
+app_activate (GApplication *app,
+              gpointer      user_data)
+{
+ 
+}
+
+int main(int argc, char *argv[])
+{
+  GtkWidget *app;
+  int status;
+
+  InitState(SAMPLERATE, FORMAT, calcBufLen(SAMPLERATE, DURATION, FORMAT));
+  /* alGetError(); /\* clear error state *\/ */
+
+  /* gtk_init(&argc, &argv); */
+
+  app = gtk_application_new("org.gnome.example", G_APPLICATION_FLAGS_NONE);
+
+  g_signal_connect(app, "startup", G_CALLBACK(app_startup), NULL);
+  g_signal_connect(app, "shutdown", G_CALLBACK(app_shutdown), NULL);
+
+  g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);
+
+  status = g_application_run(G_APPLICATION(app), argc, argv);
+  g_object_unref(app);
+
+  /* gtk_widget_show(window); */
+  /* gtk_main(); */
+
+  return status;
 }
 
 G_MODULE_EXPORT void on_record_gmmp_btn_clicked(GtkButton *Button ,GtkListStore *list)
@@ -226,7 +279,8 @@ G_MODULE_EXPORT void on_addModel_clicked(GtkButton *button,GtkListStore *list)
 G_MODULE_EXPORT void on_main_window_destroy()
 {
   DestroyState();
-  gtk_main_quit();
+  /* g_application_quit(app); */
+  printf("aadfaf");
 }
 
 G_MODULE_EXPORT void on_adjustment_value_changed(GtkAdjustment *adjustment)

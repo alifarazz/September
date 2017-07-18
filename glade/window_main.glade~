@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.10"/>
+  <object class="GtkAboutDialog" id="abdialog">
+    <property name="can_focus">False</property>
+    <property name="border_width">5</property>
+    <property name="type">popup</property>
+    <property name="window_position">center</property>
+    <property name="type_hint">dialog</property>
+    <property name="program_name">September Project</property>
+    <property name="version">2.5.2</property>
+    <property name="copyright" translatable="yes">Copyright © 2017-Ali-Amir
+
+This program comes with ABSOLUTELY NO WARRANTY 
+see the GNU General Public license,version 3 or later for details</property>
+    <property name="website">https://gitlab.com/alifarazz/September</property>
+    <property name="website_label" translatable="yes">git repo</property>
+    <property name="authors">amir.safizadeh@yahoo.com
+alifarazdaghi@gmail.com</property>
+    <property name="logo">rsz_1mic.png</property>
+    <property name="wrap_license">True</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAdjustment" id="adjustment">
+    <property name="lower">2</property>
+    <property name="upper">100</property>
+    <property name="value">5</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <signal name="value-changed" handler="on_adjustment_value_changed" swapped="no"/>
+  </object>
+  <object class="GtkImage" id="create">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-floppy</property>
+  </object>
+  <object class="GtkImage" id="gmmp">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">player_record.png</property>
+  </object>
+  <object class="GtkListStore" id="models_ls">
+    <columns>
+      <!-- column-name Model -->
+      <column type="gchararray"/>
+      <!-- column-name Score -->
+      <column type="gfloat"/>
+      <!-- column-name % -->
+      <column type="gint"/>
+      <!-- column-name %1 -->
+      <column type="gchararray"/>
+      <!-- column-name ABSpath -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkImage" id="record_img">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">player_record_white.png</property>
+  </object>
+  <object class="GtkWindow" id="main_window">
+    <property name="width_request">452</property>
+    <property name="height_request">374</property>
+    <property name="can_focus">False</property>
+    <signal name="destroy" handler="on_main_window_destroy" swapped="no"/>
+    <child>
+      <object class="GtkBox" id="main_window_grid">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkHeaderBar" id="main_headerbar">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkButton" id="record">
+                <property name="label">Record   </property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="image">record_img</property>
+                <property name="use_underline">True</property>
+                <property name="always_show_image">True</property>
+                <signal name="activate" handler="on_record_activate" swapped="no"/>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFixed" id="main_window_fixed">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkFixed" id="recordbtns_fixed">
+                <property name="width_request">135</property>
+                <property name="height_request">136</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkBox" id="recordbtns_box">
+                    <property name="width_request">100</property>
+                    <property name="height_request">80</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">8</property>
+                    <child>
+                      <object class="GtkButton" id="record_gmmp_btn">
+                        <property name="label" translatable="yes">Record and Check
+Against Models</property>
+                        <property name="name">record_gmmp_btn</property>
+                        <property name="width_request">100</property>
+                        <property name="height_request">80</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="always_show_image">True</property>
+                        <signal name="clicked" handler="on_record_gmmp_btn_clicked" object="models_ls" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="record_createModel_btn">
+                        <property name="label" translatable="yes">Record and Create
+A Model</property>
+                        <property name="name">record_createModel_btn</property>
+                        <property name="width_request">100</property>
+                        <property name="height_request">80</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="image">create</property>
+                        <property name="always_show_image">True</property>
+                        <signal name="clicked" handler="on_record_createModel_btn_clicked" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="y">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="x">14</property>
+                <property name="y">13</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFixed" id="models_fixed">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkBox" id="models_box">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkScrolledWindow" id="models_scroll">
+                        <property name="width_request">250</property>
+                        <property name="height_request">257</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="shadow_type">in</property>
+                        <child>
+                          <object class="GtkTreeView" id="models_tv">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="model">models_ls</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="model_tv_selection"/>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="tv_Model">
+                                <property name="title" translatable="yes">Model</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="tv_Model_cr">
+                                    <property name="placeholder_text">nothing</property>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="tv_Score">
+                                <property name="title" translatable="yes">Score</property>
+                                <property name="clickable">True</property>
+                                <property name="sort_order">descending</property>
+                                <property name="sort_column_id">1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="tv_Score_cr"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="tv_Progress">
+                                <property name="max_width">81</property>
+                                <property name="title" translatable="yes">%</property>
+                                <child>
+                                  <object class="GtkCellRendererProgress" id="tv_Progress_cr">
+                                    <property name="width">18</property>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="text">3</attribute>
+                                    <attribute name="value">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolbar" id="model_toolbar">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
+                        <child>
+                          <object class="GtkToolButton" id="addModel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">add speaker model to the list</property>
+                            <property name="label" translatable="yes">+</property>
+                            <property name="use_underline">True</property>
+                            <property name="stock_id">gtk-add</property>
+                            <signal name="clicked" handler="on_addModel_clicked" object="models_ls" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkToolButton" id="rmModel">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="tooltip_text" translatable="yes">remove speaker model from the list</property>
+                            <property name="label" translatable="yes">-</property>
+                            <property name="use_underline">True</property>
+                            <property name="stock_id">gtk-remove</property>
+                            <signal name="clicked" handler="on_rmModel_clicked" object="models_tv" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="homogeneous">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="x">179</property>
+                <property name="y">15</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFixed" id="scale_fixed">
+                <property name="width_request">150</property>
+                <property name="height_request">70</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkScale" id="scale">
+                    <property name="width_request">140</property>
+                    <property name="height_request">60</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="adjustment">adjustment</property>
+                    <property name="fill_level">100</property>
+                    <property name="round_digits">0</property>
+                    <property name="digits">0</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="x">15</property>
+                <property name="y">192</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFixed" id="about_fixed">
+                <property name="width_request">67</property>
+                <property name="height_request">26</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkButton" id="about_btn">
+                    <property name="label">gtk-about</property>
+                    <property name="width_request">69</property>
+                    <property name="height_request">28</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="opacity">0.59999999999999998</property>
+                    <property name="use_stock">True</property>
+                    <property name="always_show_image">True</property>
+                    <signal name="clicked" handler="on_about_btn_clicked" object="abdialog" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="x">8</property>
+                <property name="y">280</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
