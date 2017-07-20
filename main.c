@@ -49,10 +49,34 @@ app_shutdown (GApplication *app,
   g_application_quit(app);
 }
 
-const GActionEntry app_actions[] = {
-  { "quit", app_shutdown },
-  { "about", app_shutdown },
-  { "pref", app_shutdown }
+/* static void */
+/* preferences_activated (GSimpleAction *action, */
+/*                        GVariant      *parameter, */
+/*                        gpointer       app) */
+/* { */
+/*   ExampleAppPrefs *prefs; */
+/*   GtkWindow *win; */
+
+/*   win = gtk_application_get_active_window (GTK_APPLICATION (app)); */
+/*   prefs = example_app_prefs_new (EXAMPLE_APP_WINDOW (win)); */
+/*   gtk_window_present (GTK_WINDOW (prefs)); */
+/* } */
+
+static void
+quit_activated (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       app)
+{
+  DestroyState();
+  g_application_quit (G_APPLICATION (app));
+}
+
+static GActionEntry app_entries[] = {
+  /* { "pref", preferences_activated, NULL, NULL, NULL }, */
+  /* { "about", about_activated, NULL, NULL, NULL}, */
+  { "pref", quit_activated, NULL, NULL, NULL },
+  { "about", quit_activated, NULL, NULL, NULL },
+  { "quit", quit_activated, NULL, NULL, NULL }
 };
 
 static void
@@ -74,7 +98,7 @@ app_activate (GApplication *app,
   gtk_application_add_window(app, popup);
   g_object_unref(builder);
 
-  g_action_map_add_action_entries (G_ACTION_MAP (app), app_actions, G_N_ELEMENTS (app_actions), app);
+  g_action_map_add_action_entries (G_ACTION_MAP (app), app_entries, G_N_ELEMENTS (app_entries), app);
   menu = g_menu_new ();
   g_menu_append (menu, "Preferences", "app.pref");
   g_menu_append (menu, "About", "app.about");
@@ -98,7 +122,7 @@ int main(int argc, char *argv[])
 
   app = gtk_application_new("org.gnome.SPEAKER_RECOGNITION", G_APPLICATION_FLAGS_NONE);
 
-  g_signal_connect(app, "window_removed", G_CALLBACK(app_shutdown), NULL);
+  g_signal_connect(app, "shutdown", G_CALLBACK(app_shutdown), NULL);
   g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);
 
   status = g_application_run(G_APPLICATION(app), argc, argv);
