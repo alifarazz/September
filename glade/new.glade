@@ -187,53 +187,59 @@ A Model</property>
                     <property name="can_focus">True</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTreeView" id="models_tv">
+                      <object class="GtkViewport" id="models_vp">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="model">models_ls</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="model_tv_selection"/>
-                        </child>
+                        <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkTreeViewColumn" id="tv_Model">
-                            <property name="title" translatable="yes">Model</property>
-                            <property name="clickable">True</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="tv_Model_cr">
-                                <property name="placeholder_text">nothing</property>
-                              </object>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
+                          <object class="GtkTreeView" id="models_tv">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="model">models_ls</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection" id="model_tv_selection"/>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="tv_Score">
-                            <property name="title" translatable="yes">Score</property>
-                            <property name="clickable">True</property>
-                            <property name="sort_order">descending</property>
-                            <property name="sort_column_id">1</property>
                             <child>
-                              <object class="GtkCellRendererText" id="tv_Score_cr"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="tv_Progress">
-                            <property name="max_width">81</property>
-                            <property name="title" translatable="yes">%</property>
-                            <child>
-                              <object class="GtkCellRendererProgress" id="tv_Progress_cr">
-                                <property name="width">18</property>
+                              <object class="GtkTreeViewColumn" id="tv_Model">
+                                <property name="title" translatable="yes">Model</property>
+                                <property name="clickable">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="tv_Model_cr">
+                                    <property name="placeholder_text">nothing</property>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="text">0</attribute>
+                                  </attributes>
+                                </child>
                               </object>
-                              <attributes>
-                                <attribute name="text">3</attribute>
-                                <attribute name="value">2</attribute>
-                              </attributes>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="tv_Score">
+                                <property name="title" translatable="yes">Score</property>
+                                <property name="clickable">True</property>
+                                <property name="sort_order">descending</property>
+                                <property name="sort_column_id">1</property>
+                                <child>
+                                  <object class="GtkCellRendererText" id="tv_Score_cr"/>
+                                  <attributes>
+                                    <attribute name="text">1</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="tv_Progress">
+                                <property name="max_width">81</property>
+                                <property name="title" translatable="yes">%</property>
+                                <child>
+                                  <object class="GtkCellRendererProgress" id="tv_Progress_cr">
+                                    <property name="width">18</property>
+                                  </object>
+                                  <attributes>
+                                    <attribute name="text">3</attribute>
+                                    <attribute name="value">2</attribute>
+                                  </attributes>
+                                </child>
+                              </object>
                             </child>
                           </object>
                         </child>
