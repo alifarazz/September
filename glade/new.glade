@@ -97,7 +97,6 @@ alifarazdaghi@gmail.com</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="icon_name">audio-input-microphone</property>
-    <signal name="destroy" handler="on_main_window_destroy" swapped="no"/>
     <child>
       <object class="GtkFixed" id="main_window_fixed">
         <property name="visible">True</property>

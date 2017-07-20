@@ -42,12 +42,11 @@ char* extractName (char *name)
 }
 
 static void
-app_shutdown (GApplication *application,
+app_shutdown (GApplication *app,
               gpointer      user_data)
 {
-  g_print("hello1!\n");
   DestroyState();
-  g_application_quit(user_data);
+  g_application_quit(app);
 }
 
 const GActionEntry app_actions[] = {
@@ -57,8 +56,8 @@ const GActionEntry app_actions[] = {
 };
 
 static void
-app_startup (GApplication *app,
-             gpointer      user_data)
+app_activate (GApplication *app,
+              gpointer      user_data)
 {
   GtkWidget       *window;
   GtkBuilder      *builder;
@@ -87,13 +86,6 @@ app_startup (GApplication *app,
   gtk_widget_show(window);
 }
 
-static void
-app_activate (GApplication *app,
-              gpointer      user_data)
-{
- 
-}
-
 int main(int argc, char *argv[])
 {
   GtkWidget *app;
@@ -104,11 +96,9 @@ int main(int argc, char *argv[])
 
   /* gtk_init(&argc, &argv); */
 
-  app = gtk_application_new("org.gnome.example", G_APPLICATION_FLAGS_NONE);
+  app = gtk_application_new("org.gnome.SPEAKER_RECOGNITION", G_APPLICATION_FLAGS_NONE);
 
-  g_signal_connect(app, "startup", G_CALLBACK(app_startup), NULL);
-  g_signal_connect(app, "shutdown", G_CALLBACK(app_shutdown), NULL);
-
+  g_signal_connect(app, "window_removed", G_CALLBACK(app_shutdown), NULL);
   g_signal_connect(app, "activate", G_CALLBACK(app_activate), NULL);
 
   status = g_application_run(G_APPLICATION(app), argc, argv);
@@ -274,13 +264,6 @@ G_MODULE_EXPORT void on_addModel_clicked(GtkButton *button,GtkListStore *list)
     g_print("canceled\n");
 
   gtk_widget_destroy(dialog);
-}
-
-G_MODULE_EXPORT void on_main_window_destroy()
-{
-  DestroyState();
-  /* g_application_quit(app); */
-  printf("aadfaf");
 }
 
 G_MODULE_EXPORT void on_adjustment_value_changed(GtkAdjustment *adjustment)
