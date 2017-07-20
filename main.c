@@ -32,6 +32,7 @@ enum {
 };
 
 ALuint duration = 5;
+GtkWidget *about_popup;
 
 char* extractName (char *name)
 {
@@ -63,6 +64,15 @@ app_shutdown (GApplication *app,
 /* } */
 
 static void
+about_activated (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       app)
+{
+  gtk_dialog_run(GTK_DIALOG(about_popup));
+  gtk_widget_hide(about_popup);
+}
+
+static void
 quit_activated (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       app)
@@ -75,7 +85,7 @@ static GActionEntry app_entries[] = {
   /* { "pref", preferences_activated, NULL, NULL, NULL }, */
   /* { "about", about_activated, NULL, NULL, NULL}, */
   { "pref", quit_activated, NULL, NULL, NULL },
-  { "about", quit_activated, NULL, NULL, NULL },
+  { "about", about_activated, NULL, NULL, NULL },
   { "quit", quit_activated, NULL, NULL, NULL }
 };
 
@@ -85,17 +95,16 @@ app_activate (GApplication *app,
 {
   GtkWidget       *window;
   GtkBuilder      *builder;
-  GtkWidget       *popup;
   GMenu           *menu;
   builder = gtk_builder_new();
   gtk_builder_add_from_file (builder, "./glade/new.glade", NULL);
 
   window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
-  popup  = GTK_WIDGET(gtk_builder_get_object( builder, "abdialog" ));
+  about_popup= GTK_WIDGET(gtk_builder_get_object( builder, "abdialog" ));
   gtk_builder_connect_signals(builder, NULL);
 
   gtk_application_add_window(app, window);
-  gtk_application_add_window(app, popup);
+  gtk_application_add_window(app, about_popup);
   g_object_unref(builder);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app), app_entries, G_N_ELEMENTS (app_entries), app);
