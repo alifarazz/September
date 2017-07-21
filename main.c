@@ -31,6 +31,8 @@ enum {
   ABSPATH
 };
 
+G_MODULE_EXPORT void on_main_window_destory(GtkButton *button, gpointer app);
+
 ALuint duration = 5;
 GtkWidget *about_popup;
 
@@ -43,25 +45,46 @@ char* extractName (char *name)
 }
 
 static void
-app_shutdown (GApplication *app,
-              gpointer      user_data)
+create_new_model_activated (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       app)
 {
-  DestroyState();
-  g_application_quit(app);
+  GtkWidget *dialog;
+  gchar *modelname;
+  OALSampleSet sset;
+  gint result;
+  FILE *charfp, *x2xfp, *framefp, *mfccfp;
+
+  sset.format = FORMAT;
+  sset.freq   = SAMPLERATE;
+
+  Record(&sset, duration);
+  /* Play(&sset); */
+
+  charfp = charFromsamp((char*) sset.data, sset.len); rewind(charfp); free(sset.data);
+  x2xfp = x2xFromchar(charfp); rewind(x2xfp); fclose(charfp);
+  framefp = frameFromX2x(x2xfp); rewind(framefp); fclose(x2xfp);
+  mfccfp = MFCCFromFrame(framefp); rewind(mfccfp); fclose(framefp);
+
+  dialog = gtk_file_chooser_dialog_new ("Save Model As ...", NULL,
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                                        NULL);
+  result = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (result == GTK_RESPONSE_ACCEPT) {
+    modelname = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+
+    gmmFromMFCC(modelname, mfccfp);
+
+    g_print("created Model %s\n", modelname);
+		g_free(modelname);
+  } else
+    g_print("model creation canceled\n");
+  gtk_widget_destroy (dialog);
+
+  fclose(mfccfp);
 }
-
-/* static void */
-/* preferences_activated (GSimpleAction *action, */
-/*                        GVariant      *parameter, */
-/*                        gpointer       app) */
-/* { */
-/*   ExampleAppPrefs *prefs; */
-/*   GtkWindow *win; */
-
-/*   win = gtk_application_get_active_window (GTK_APPLICATION (app)); */
-/*   prefs = example_app_prefs_new (EXAMPLE_APP_WINDOW (win)); */
-/*   gtk_window_present (GTK_WINDOW (prefs)); */
-/* } */
 
 static void
 about_activated (GSimpleAction *action,
@@ -84,10 +107,17 @@ quit_activated (GSimpleAction *action,
 static GActionEntry app_entries[] = {
   /* { "pref", preferences_activated, NULL, NULL, NULL }, */
   /* { "about", about_activated, NULL, NULL, NULL}, */
-  { "pref", quit_activated, NULL, NULL, NULL },
+  { "createModel", create_new_model_activated, NULL, NULL, NULL },
   { "about", about_activated, NULL, NULL, NULL },
   { "quit", quit_activated, NULL, NULL, NULL }
 };
+
+static void
+app_shutdown (GApplication *app,
+              gpointer      user_data)
+{
+  g_print("bye...\n");
+}
 
 static void
 app_activate (GApplication *app,
@@ -97,11 +127,15 @@ app_activate (GApplication *app,
   GtkBuilder      *builder;
   GMenu           *menu;
   builder = gtk_builder_new();
-  gtk_builder_add_from_file (builder, "./glade/new.glade", NULL);
+  gtk_builder_add_from_file (builder, "./glade/glade.glade", NULL);
 
   window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
   about_popup= GTK_WIDGET(gtk_builder_get_object( builder, "abdialog" ));
   gtk_builder_connect_signals(builder, NULL);
+  g_signal_connect (G_OBJECT(window),
+                    "destroy",
+                    G_CALLBACK(on_main_window_destory),
+                    G_OBJECT(app));
 
   gtk_application_add_window(app, window);
   gtk_application_add_window(app, about_popup);
@@ -109,7 +143,7 @@ app_activate (GApplication *app,
 
   g_action_map_add_action_entries (G_ACTION_MAP (app), app_entries, G_N_ELEMENTS (app_entries), app);
   menu = g_menu_new ();
-  g_menu_append (menu, "Preferences", "app.pref");
+  g_menu_append (menu, "Create New Model", "app.createModel");
   g_menu_append (menu, "About", "app.about");
   g_menu_append (menu, "Quit", "app.quit");
   gtk_application_set_app_menu (G_APPLICATION (app), menu);
@@ -143,7 +177,7 @@ int main(int argc, char *argv[])
   return status;
 }
 
-G_MODULE_EXPORT void on_record_gmmp_btn_clicked(GtkButton *Button ,GtkListStore *list)
+G_MODULE_EXPORT void on_record_btn_clicked(GtkButton *Button ,GtkListStore *list)
 {
   GtkTreeIter iter;
   gboolean valid;
@@ -187,11 +221,17 @@ G_MODULE_EXPORT void on_record_gmmp_btn_clicked(GtkButton *Button ,GtkListStore 
       min = result;
 
     g_print("%s: %f\n", extractName(filename), result);
-    sprintf (resulttxt, "%d", (int) (result + 132));
+    if (result +132 <= 100 && 0 <= result + 132)
+      sprintf (resulttxt, "%d%%", (int) (result + 132));
+    else if (result + 132 > 100)
+      sprintf (resulttxt, "%d%%", 100);
+    else if (result + 132 < 0)
+      sprintf (resulttxt, "%d%%", 0);
+
     gtk_list_store_set(list, &iter,
 											 /*MODEL, extractName(filename),*/
 											 SCORE, result,
-											 PROGRESS, (int) (result + 132),
+											 PROGRESS, atoi(resulttxt),
 											 PROGRESSTXT, resulttxt,
 											 -1);
 		g_free(filename);
@@ -200,44 +240,6 @@ G_MODULE_EXPORT void on_record_gmmp_btn_clicked(GtkButton *Button ,GtkListStore 
 
   g_print("min is %f\n", min);
   g_print("max is %f\n", max);
-
-  fclose(mfccfp);
-}
-
-G_MODULE_EXPORT void on_record_createModel_btn_clicked(GtkButton *Button)
-{
-  GtkWidget *dialog;
-  gchar *modelname;
-  OALSampleSet sset;
-  FILE *charfp, *x2xfp, *framefp, *mfccfp;
-
-  sset.format = FORMAT;
-  sset.freq   = SAMPLERATE;
-
-  Record(&sset, duration);
-  /* Play(&sset); */
-
-  charfp = charFromsamp((char*) sset.data, sset.len); rewind(charfp); free(sset.data);
-  x2xfp = x2xFromchar(charfp); rewind(x2xfp); fclose(charfp);
-  framefp = frameFromX2x(x2xfp); rewind(framefp); fclose(x2xfp);
-  mfccfp = MFCCFromFrame(framefp); rewind(mfccfp); fclose(framefp);
-
-  dialog = gtk_file_chooser_dialog_new ("Save Model As ...", NULL,
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                        GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                                        NULL);
-  gint result = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (result == GTK_RESPONSE_ACCEPT) {
-    modelname = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-
-    gmmFromMFCC(modelname, mfccfp);
-
-    g_print("created Model %s\n", modelname);
-		g_free(modelname);
-  } else
-    g_print("model canceled\n");
-  gtk_widget_destroy (dialog);
 
   fclose(mfccfp);
 }
@@ -308,4 +310,10 @@ G_MODULE_EXPORT void on_about_btn_clicked(GtkButton *button,GtkWidget *popup)
 {
   gtk_dialog_run(GTK_DIALOG(popup));
   gtk_widget_hide(popup);
+}
+
+G_MODULE_EXPORT void on_main_window_destory(GtkButton *button, gpointer app)
+{
+  DestroyState();
+  g_application_quit(app);
 }
