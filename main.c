@@ -100,7 +100,7 @@ quit_activated (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       app)
 {
-  DestroyState();
+  g_application_quit(app);
 }
 
 static GActionEntry app_entries[] = {
@@ -115,6 +115,7 @@ static void
 app_shutdown (GApplication *app,
               gpointer      user_data)
 {
+  DestroyState();
   g_print("bye...\n");
 }
 
