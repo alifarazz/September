@@ -5,7 +5,7 @@ LD=gcc
 # optimisation
 OPT=-O2
 # warnings
-WARN=-Wall -Wextra
+WARN=
 # standards
 STD=-ansi -pedantic
 # pthread

@@ -101,7 +101,6 @@ quit_activated (GSimpleAction *action,
                 gpointer       app)
 {
   DestroyState();
-  g_application_quit (G_APPLICATION (app));
 }
 
 static GActionEntry app_entries[] = {
@@ -127,7 +126,7 @@ app_activate (GApplication *app,
   GtkBuilder      *builder;
   GMenu           *menu;
   builder = gtk_builder_new();
-  gtk_builder_add_from_file (builder, "./glade/glade.glade", NULL);
+  gtk_builder_add_from_file (builder, "./glade/main_window.glade", NULL);
 
   window = GTK_WIDGET(gtk_builder_get_object(builder, "main_window"));
   about_popup= GTK_WIDGET(gtk_builder_get_object( builder, "abdialog" ));
@@ -314,6 +313,5 @@ G_MODULE_EXPORT void on_about_btn_clicked(GtkButton *button,GtkWidget *popup)
 
 G_MODULE_EXPORT void on_main_window_destory(GtkButton *button, gpointer app)
 {
-  DestroyState();
   g_application_quit(app);
 }
