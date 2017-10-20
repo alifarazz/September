@@ -3,6 +3,9 @@
 A text-independent real-time Speaker Recognition system written in ANSI C.
 
 
+![alt text](screenshots/2.6.png)
+
+
 ## Installation
 **1. Install the dependencies**
 
