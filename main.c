@@ -78,7 +78,7 @@ create_new_model_activated (GSimpleAction *action,
     gmmFromMFCC(modelname, mfccfp);
 
     g_print("created Model %s\n", modelname);
-		g_free(modelname);
+    g_free(modelname);
   } else
     g_print("model creation canceled\n");
   gtk_widget_destroy (dialog);
@@ -188,7 +188,7 @@ G_MODULE_EXPORT void on_record_btn_clicked(GtkButton *Button ,GtkListStore *list
   FILE *charfp, *x2xfp, *framefp, *mfccfp;
   float min = FLT_MAX, max = -FLT_MAX;
   char resulttxt[10];
-	char *filename;
+  char *filename;
   /* int c; */
   /* FILE *outputfpmfcc = fopen("./res1.mfcc", "wb"); */
 
@@ -205,12 +205,12 @@ G_MODULE_EXPORT void on_record_btn_clicked(GtkButton *Button ,GtkListStore *list
 
 
   valid = gtk_tree_model_get_iter_first(GTK_TREE_MODEL(list), &iter);
-	while (valid) {
-		gtk_tree_model_get(GTK_TREE_MODEL(list), &iter, ABSPATH, &filename, -1);
-		if(filename == NULL) {
-			g_print("encounterd NULL filename\n");
-			break;
-		}
+  while (valid) {
+    gtk_tree_model_get(GTK_TREE_MODEL(list), &iter, ABSPATH, &filename, -1);
+    if(filename == NULL) {
+      g_print("encounterd NULL filename\n");
+      break;
+    }
 
     /* g_print("Checked Against: %s\n",filename[j]); */
     result = gmmpFromMFCC(filename, mfccfp); rewind(mfccfp);
@@ -229,13 +229,13 @@ G_MODULE_EXPORT void on_record_btn_clicked(GtkButton *Button ,GtkListStore *list
       sprintf (resulttxt, "%d%%", 0);
 
     gtk_list_store_set(list, &iter,
-											 /*MODEL, extractName(filename),*/
-											 SCORE, result,
-											 PROGRESS, atoi(resulttxt),
-											 PROGRESSTXT, resulttxt,
-											 -1);
-		g_free(filename);
-		valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(list), &iter);
+		       /*MODEL, extractName(filename),*/
+		       SCORE, result,
+		       PROGRESS, atoi(resulttxt),
+		       PROGRESSTXT, resulttxt,
+		       -1);
+    g_free(filename);
+    valid = gtk_tree_model_iter_next(GTK_TREE_MODEL(list), &iter);
   }
 
   g_print("min is %f\n", min);
@@ -269,9 +269,9 @@ G_MODULE_EXPORT void on_addModel_clicked(GtkButton *button,GtkListStore *list)
   GtkTreeIter iter;
   GtkWidget *dialog;
   GtkFileFilter *filter;
-	char *filename;
-	gfloat foo = 0;
-
+  char *filename;
+  gfloat foo = 0;
+  
   dialog=gtk_file_chooser_dialog_new("Select a Model",NULL,
                                      GTK_FILE_CHOOSER_ACTION_OPEN,
                                      GTK_STOCK_OK,GTK_RESPONSE_OK,
@@ -287,14 +287,14 @@ G_MODULE_EXPORT void on_addModel_clicked(GtkButton *button,GtkListStore *list)
     filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
     gtk_list_store_append(list, &iter);
     gtk_list_store_set(list, &iter,
-											 MODEL, extractName(filename),
-											 SCORE, foo,
+		       MODEL, extractName(filename),
+		       SCORE, foo,
                        PROGRESS, 0,
-											 PROGRESSTXT, "",
-											 ABSPATH, filename,
-											 -1);
-		g_print("filename added %s\n", filename);
-		g_free(filename);
+		       PROGRESSTXT, "",
+		       ABSPATH, filename,
+		       -1);
+    g_print("filename added %s\n", filename);
+    g_free(filename);
   } else
     g_print("canceled\n");
 
