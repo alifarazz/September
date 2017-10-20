@@ -3,6 +3,13 @@
 A text-independent real-time Speaker Recognition system written in ANSI C.
 
 
+- Open Source and Cross-platform
+- Uses MFCC for feature extraction
+- Uses GMM for data clustring
+- Supports speaker model creation
+- Can record and verify an arbitrary amount of sound
+- Uses new the GTK+3 features
+
 ![alt text](screenshots/2.6.png)
 
 
