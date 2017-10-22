@@ -1,6 +1,6 @@
 #       September
 
-A text-independent real-time Speaker Recognition system written in ANSI C.
+A text-independent Speaker Recognition system written in ANSI C.
 
 
 - Open Source and Cross-platform
